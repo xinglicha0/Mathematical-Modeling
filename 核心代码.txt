@@ -1,0 +1,814 @@
+﻿#用于统计的hadoop的MapReduce代码（JAVA）
+
+import java.io.IOException;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.log4j.BasicConfigurator;
+
+public class jianmo {
+
+	public static class CarLocusMapper extends Mapper<Object, Text, Text, IntWritable> {
+
+      private Text StrKey = new Text();
+      private final static IntWritable one = new IntWritable(1);
+      public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+    	  String[] SplitValue = value.toString().split("\n");
+          for (String str: SplitValue) {
+          	  String[] SplitStr = str.split("[+]");
+          	  StrKey.set(SplitStr[1] + "-" + SplitStr[2]);
+          	context.write(StrKey, one);
+          }
+      }
+  }
+
+  public static class CarLocusReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+
+	  private IntWritable result = new IntWritable();
+
+      public void reduce(Text key, Iterable<IntWritable> values, Context context)
+              throws IOException, InterruptedException {
+          int sum = 0;
+      	  for (IntWritable val : values) {
+      		  sum += val.get();
+          }
+      	result.set(sum);
+        context.write(key, result);
+      }
+  }
+
+  public static void main(String[] args) throws Exception {
+  	BasicConfigurator.configure();
+  	Configuration conf = new Configuration();
+      if (args.length != 2) {
+          System.err.println("Usage: <in> <out>");
+          System.exit(2);
+      }
+      Job job = Job.getInstance(conf, "word count");
+      job.setJarByClass(jianmo.class);
+      job.setMapperClass(CarLocusMapper.class);
+      job.setCombinerClass(CarLocusReducer.class);
+      job.setReducerClass(CarLocusReducer.class);
+      job.setOutputKeyClass(Text.class);
+      job.setOutputValueClass(IntWritable.class);
+      FileInputFormat.addInputPath(job, new Path(args[0]));
+      FileOutputFormat.setOutputPath(job, new Path(args[1]));
+      System.exit(job.waitForCompletion(true) ? 0 : 1);
+  }
+}
+
+#统计related的事件数据（JAVA）
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
+
+public class related {
+	public static BufferedWriter makefile(String str) throws IOException {
+		BufferedWriter bw = new BufferedWriter(
+				new OutputStreamWriter(
+					new FileOutputStream(str)));
+		return bw;
+	}
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(
+				new InputStreamReader(
+					new FileInputStream("data.csv")));
+
+		String str = "";
+		BufferedWriter bw1998 = makefile("out1998.csv");
+		BufferedWriter bw1999 = makefile("out1999.csv");
+		BufferedWriter bw2000 = makefile("out2000.csv");
+		BufferedWriter bw2001 = makefile("out2001.csv");
+		BufferedWriter bw2002 = makefile("out2002.csv");
+		BufferedWriter bw2003 = makefile("out2003.csv");
+		BufferedWriter bw2004 = makefile("out2004.csv");
+		BufferedWriter bw2005 = makefile("out2005.csv");
+		BufferedWriter bw2006 = makefile("out2006.csv");
+		BufferedWriter bw2007 = makefile("out2007.csv");
+		BufferedWriter bw2008 = makefile("out2008.csv");
+		BufferedWriter bw2009 = makefile("out2009.csv");
+		BufferedWriter bw2010 = makefile("out2010.csv");
+		BufferedWriter bw2011 = makefile("out2011.csv");
+		BufferedWriter bw2012 = makefile("out2012.csv");
+		BufferedWriter bw2013 = makefile("out2013.csv");
+		BufferedWriter bw2014 = makefile("out2014.csv");
+		BufferedWriter bw2015 = makefile("out2015.csv");
+		BufferedWriter bw2016 = makefile("out2016.csv");
+		BufferedWriter bw2017 = makefile("out2017.csv");
+		while((str = br.readLine()) != null) {
+			String[] SplitStr = str.split("[+]");
+			if(SplitStr[SplitStr.length - 1].length() > 11) {
+        		String str_a = SplitStr[SplitStr.length - 1].replace(" ", "").replace("\\", "").replaceAll("and", ",").replaceAll(",", "+");
+        		String key_str = str_a.substring(0, 4);
+        		
+        		switch(key_str) {
+        		case "1998":
+        			bw1998.write(str_a);
+        			bw1998.newLine();
+        			break;
+        		case "1999":
+        			bw1999.write(str_a);
+        			bw1999.newLine();
+        			break;
+        		case "2000":
+        			bw2000.write(str_a);
+        			bw2000.newLine();
+        			break;
+        		case "2001":
+        			bw2001.write(str_a);
+        			bw2001.newLine();
+        			break;
+        		case "2002":
+        			bw2002.write(str_a);
+        			bw2002.newLine();
+        			break;
+        		case "2003":
+        			bw2003.write(str_a);
+        			bw2003.newLine();
+        			break;
+        		case "2004":
+        			bw2004.write(str_a);
+        			bw2004.newLine();
+        			break;
+        		case "2005":
+        			bw2005.write(str_a);
+        			bw2005.newLine();
+        			break;
+        		case "2006":
+        			bw2006.write(str_a);
+        			bw2006.newLine();
+        			break;
+        		case "2007":
+        			bw2007.write(str_a);
+        			bw2007.newLine();
+        			break;
+        		case "2008":
+        			bw2008.write(str_a);
+        			bw2008.newLine();
+        			break;
+        		case "2009":
+        			bw2009.write(str_a);
+        			bw2009.newLine();
+        			break;
+        		case "2010":
+        			bw2010.write(str_a);
+        			bw2010.newLine();
+        			break;
+        		case "2011":
+        			bw2011.write(str_a);
+        			bw2011.newLine();
+        			break;
+        		case "2012":
+        			bw2012.write(str_a);
+        			bw2012.newLine();
+        			break;
+        		case "2013":
+        			bw2013.write(str_a);
+        			bw2013.newLine();
+        			break;
+        		case "2014":
+        			bw2014.write(str_a);
+        			bw2014.newLine();
+        			break;
+        		case "2015":
+        			bw2015.write(str_a);
+        			bw2015.newLine();
+        			break;
+        		case "2016":
+        			bw2016.write(str_a);
+        			bw2016.newLine();
+        			break;
+        		case "2017":
+        			bw2017.write(str_a);
+        			bw2017.newLine();
+        			break;
+        		default:
+        			break;
+        		}
+		    }
+		}
+		br.close();
+		bw1998.close();
+		bw1999.close();
+		bw2000.close();
+		bw2001.close();
+		bw2002.close();
+		bw2003.close();
+		bw2004.close();
+		bw2005.close();
+		bw2006.close();
+		bw2007.close();
+		bw2008.close();
+		bw2009.close();
+		bw2010.close();
+		bw2011.close();
+		bw2012.close();
+		bw2013.close();
+		bw2014.close();
+		bw2015.close();
+		bw2016.close();
+		bw2017.close();
+    }
+}
+
+#绘制相关性恐怖袭击事件的组数（Matlab）
+
+data = xlsread('1998-2017年具有相关性恐怖袭击事件的组数.xlsx');
+x = data(:, 1);
+y = data(:, 2);
+bar(x, y)
+grid on;
+set(gca,'XTickLabelRotation',46)
+for i = 1:length(y)
+text(x(i),y(i) + 120,num2str(y(i)),'VerticalAlignment','middle','HorizontalAlignment','center');
+end
+title('1998-2017年具有相关性恐怖袭击事件的组数')
+xlim([1997 2018])
+xlabel('年份（年）');
+ylabel('相关恐怖事件数量（组）');
+
+#ARIMA预测模型（Python）
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import statsmodels.api as sm
+import numpy as np
+from statsmodels.tsa.arima_model import ARMA
+from statsmodels.tsa.stattools import adfuller
+from pylab import show
+from datetime import datetime
+import warnings
+
+warnings.filterwarnings('ignore')
+def timestamp_datatime(value):
+    dt = datetime.strptime(value, "%Y-%m")
+    return dt
+
+def read_data(aim_list_1, aim_list_2, file_name):
+    _file = open(file_name,'r')
+    data = _file.readlines()
+    dict_tmp = {}
+    for data_i in data:
+        array_sub_data = data_i.split("\t")
+        time_ym = timestamp_datatime(array_sub_data[0])
+        dict_tmp[time_ym] = int(array_sub_data[1])
+    
+    keys = sorted(dict_tmp.keys())
+    for key in keys:
+        aim_list_1.append(key)
+        aim_list_2.append(dict_tmp[key])
+    _file.close()
+    return
+def proper_model(timeseries, maxLag):
+    init_bic = 1000000000
+    for p in np.arange(maxLag):
+        for q in np.arange(maxLag):
+            model = ARMA(timeseries, order=(p, q))
+            try:
+                results_ARMA = model.fit(disp = 0, method='css')
+            except:
+                continue
+            bic = results_ARMA.bic
+            if bic < init_bic:
+                model_return = results_ARMA
+                init_bic = bic
+    print("p:", p, "q:", q)
+    return model_return
+
+def time_seq_no_diff(ym, num):
+    tidx = pd.DatetimeIndex(ym, freq = None)
+    dta = pd.Series(num, index = tidx)
+	
+    dta_diff= dta.diff(1)
+    dta_diff = dta_diff.truncate(before= ym[1])
+    plt.plot(dta,label='Original')
+    plt.plot(dta_diff,label='1-Diff')
+    plt.grid(color='k', linestyle='--')
+    plt.legend(loc=2)
+    plt.tight_layout()
+    plt.show()
+    test_stationarity(dta)
+    fig = plt.figure(figsize=(9,6))
+    ax1 = fig.add_subplot(211)
+    fig = sm.graphics.tsa.plot_acf(dta,lags=30,ax=ax1)
+    ax2 = fig.add_subplot(212)
+    fig = sm.graphics.tsa.plot_pacf(dta,lags=30,ax=ax2)
+
+    show()
+    return
+def time_seq_with_diff(ym, num):
+    tidx = pd.DatetimeIndex(ym, freq = None)
+    dta = pd.Series(num, index = tidx)
+
+    dta= dta.diff(1)
+    dta = dta.truncate(before= ym[1])
+
+    plt.plot(dta,label='1-Diff')
+    plt.grid(color='k', linestyle='--')
+    plt.legend(loc=2)
+    plt.tight_layout()
+    plt.show()
+    
+    test_stationarity(dta)
+    fig = plt.figure(figsize=(9,6))
+    ax1 = fig.add_subplot(211)
+    fig = sm.graphics.tsa.plot_acf(dta,lags=30,ax=ax1)
+    ax2 = fig.add_subplot(212)
+    fig = sm.graphics.tsa.plot_pacf(dta,lags=30,ax=ax2)
+    show()
+    return dta
+def test_stationarity(timeseries):
+    dftest = adfuller(timeseries, autolag='AIC')
+    print(dftest)
+    return
+
+def train_test(timeseries, ym, num):
+    
+    dta_bk = timeseries
+    dta_train = timeseries.truncate(after= "2016-12")
+    
+    rama_mod = proper_model(dta_train, 9)
+    
+    predict_sunspots = rama_mod.predict('2017-01', '2017-12', dynamic=True)
+
+    num_tmp = []
+    num_tmp_pr = num.copy()
+    for num_i in range(len(ym) - 1):
+        num_tmp.append(dta_bk[dta_bk.index[num_i]])
+ 
+    num_last = num[-13]
+    sum_or = 0
+    sum_pr = 0
+    for i in range(12):
+        num_tmp[-1 - i] = predict_sunspots[i]
+        num_last = num_last + predict_sunspots[i]
+        num_tmp_pr[-1 - i] = int(num_last)
+        sum_or += num[-1 - i]
+        sum_pr += int(num_last)
+    print(num[-12: ])
+    print(num_tmp_pr[-12: ])
+    print(sum_or, sum_pr)
+    print((sum_pr - sum_or) * 1.0 / sum_or)
+    tidx = pd.DatetimeIndex(ym[1:], freq = None)
+    dta_re = pd.Series(num_tmp, index = tidx)
+    
+    tidx_or = pd.DatetimeIndex(ym, freq = None)
+    dta_or = pd.Series(num, index = tidx_or)
+    
+    tidx_pr = pd.DatetimeIndex(ym, freq = None)
+    dta_pr = pd.Series(num_tmp_pr, index = tidx_pr)
+    
+    plt.plot(dta_or,label='Original')
+    plt.plot(dta_pr,label='Predict')
+    plt.plot(dta_bk,label='Original-Diff')
+    plt.plot(dta_re,label='Predict-Diff')
+    plt.grid(color='k', linestyle='--')
+    plt.legend(loc=1)
+    plt.tight_layout()
+    plt.show()
+
+def predict(timeseries, ym, num):
+
+    rama_mod = proper_model(timeseries, 9)    
+    predict_sunspots = rama_mod.predict('2018-01', '2018-12', dynamic=True)
+    list_re = [timeseries[timeseries.index[-1]],]
+    list_time = [timestamp_datatime("2017-12"),]
+    for pr_i in range(len(predict_sunspots)):
+        list_re.append(predict_sunspots[pr_i])
+        list_time.append(timestamp_datatime("2018-" + str(pr_i + 1)))
+        
+    num_last = num[-1]
+    num_re = [num_last, ]
+    sum_num = 0
+    for i in range(12):
+        num_last = num_last + predict_sunspots[i]
+        num_re.append(int(num_last))
+        sum_num += int(num_last)
+    print(num_re[1: ])
+    print(sum_num)
+    tidx = pd.DatetimeIndex(list_time, freq = None)
+    dta_re = pd.Series(list_re, index = tidx)
+    tidx_or = pd.DatetimeIndex(ym, freq = None)
+    dta_or = pd.Series(num, index = tidx_or)
+    tidx_long = pd.DatetimeIndex(list_time, freq = None)
+    dta_long = pd.Series(num_re, index = tidx_long)
+    
+    plt.plot(dta_or,label='2015-2017')
+    plt.plot(dta_long,label='2018')
+    plt.plot(dta,label='2015-2017-Diff')
+    plt.plot(dta_re,label='2018-Diff')
+    plt.grid(color='k', linestyle='--')
+    plt.legend(loc = 1)
+    plt.tight_layout()
+#    plt.title("Philippines")
+    plt.title("World")
+    plt.show()
+
+if __name__ == '__main__':
+    ym = []
+    num = []
+    file_name = 'ym'
+    read_data(ym, num, file_name)
+    
+    time_seq_no_diff(ym, num)
+
+    dta = time_seq_with_diff(ym, num)
+    train_test(dta, ym, num)
+    predict(dta, ym, num)
+
+#第一层聚类（Python）  
+
+import imp,sys
+import csv
+import codecs
+from sklearn.cluster import KMeans
+import numpy as np
+np.set_printoptions(threshold = np.inf)
+
+event_to_vector = {}
+vector_to_event = {}
+event_dict = {}
+event_clusters = set()
+
+list_cluster_center_point = []
+list_cluster_center_tmp = []
+
+data_set = []
+
+event_feature_to_event_id = {}
+
+with open('data.csv', "r") as f:
+	reader = csv.DictReader(f, delimiter='+')
+	for row in reader:
+		select_feature = []
+
+		if (row['eventid'] >'201412310106' and row['eventid'] < '201701010001' and row['claimed'] == '0' and row['related'] != ''):
+			if(row['eventid'] in event_dict.keys()):
+				event_dict[row['eventid']].append(row['related'])
+			else:
+				event_dict[row['eventid']] = row['related']
+			select_feature.append(float(row['extended']))
+			select_feature.append(float(row['crit1']))
+			select_feature.append(float(row['crit2']))
+			select_feature.append(float(row['crit3']))
+			select_feature.append(float(row['doubtterr']))
+			if (row['alternative'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['alternative']))
+			select_feature.append(float(row['country']))
+			select_feature.append(float(row['region']))
+			select_feature.append(float(row['attacktype1']))
+			select_feature.append(float(row['suicide']))
+			select_feature.append(float(row['weaptype1']))
+			if (row['weapsubtype1'] == ''):
+				select_feature.append(float('27'))
+			else:
+				select_feature.append(float(row['weapsubtype1']))
+			select_feature.append(float(row['targtype1']))
+
+			if (row['targsubtype1'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['targsubtype1']))
+
+			if (row['natlty1'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['natlty1']))
+				
+			if (row['nperps'] == ''):
+				select_feature.append(float('-99'))
+			else:
+				select_feature.append(float(row['nperps']))
+
+			if (row['claimmode'] == ''):
+				select_feature.append(float('10'))
+			else:
+				select_feature.append(float(row['claimmode']))
+
+			if (row['nkill'] == ''):
+				select_feature.append(float('0'))
+			else:
+				select_feature.append(float(row['nkill']))
+
+			select_feature.append(float(row['property']))
+
+			if (row['propextent'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['propextent']))
+
+			select_feature.append(float(row['ishostkid']))
+
+			if (row['nhostkid'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['nhostkid']))
+
+			if (row['ransom'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['ransom']))
+
+			if (row['ransomamt'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['ransomamt']))
+
+			if (row['hostkidoutcome'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['hostkidoutcome']))
+
+			if (row['nreleased'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['nreleased']))
+
+			select_feature.append(float(row['INT_LOG']))
+			select_feature.append(float(row['INT_IDEO']))
+			select_feature.append(float(row['INT_MISC']))
+			select_feature.append(float(row['INT_ANY']))
+
+			event_to_vector[row['eventid']] = select_feature
+			data_set.append(select_feature)
+
+			select_feature_tmp = [str(i) for i in select_feature]
+			select_feature_str = ",".join(select_feature_tmp)
+			if(select_feature_str in event_feature_to_event_id.keys()):
+				event_feature_to_event_id[select_feature_str] = event_feature_to_event_id[select_feature_str] + ',' + row['eventid']
+			else:
+				event_feature_to_event_id[select_feature_str] = row['eventid']
+
+
+	for(k, v) in event_dict.items():
+		event_clusters.add(v)
+
+for event in event_clusters:
+	mark = 0
+	for event_id in event.split(', '):
+		if(not event_id in event_to_vector.keys()):
+			mark = 1
+
+	if(mark == 0):
+		list_cluster_center_tmp[:] = []
+		for event_id in event.split(', '):
+			list_cluster_center_tmp.append(event_to_vector[event_id] )
+
+		list_cluster_center_sum = [0 for n in range(0, len(event_to_vector['201601200023']))]
+
+		for point in list_cluster_center_tmp:
+			for i in range(len(event_to_vector['201601200023'])):
+				list_cluster_center_sum[i] = list_cluster_center_sum[i] + point[i]
+
+		for i in range(len(event_to_vector['201601200023'])):
+			list_cluster_center_sum[i] = list_cluster_center_sum[i] / len(list_cluster_center_tmp)
+
+		list_cluster_center_point.append(list_cluster_center_sum)
+
+f.close()
+
+X = np.array(data_set)
+kmeans=KMeans(n_clusters=len(list_cluster_center_point),n_init=1,init=np.array(list_cluster_center_point)).fit(X).predict(X)
+
+for i in range(len(data_set)):
+	print i ,
+	print data_set[i] , 
+	data_set_tmp = [str(j) for j in data_set[i]]
+	print event_feature_to_event_id[",".join(data_set_tmp)] ,
+	print kmeans[i] ,
+	print
+
+#第二层聚类（Python）
+
+import imp,sys
+import csv
+import codecs
+from sklearn.cluster import KMeans
+import numpy as np
+np.set_printoptions(threshold = np.inf)
+
+event_to_vector = {}
+vector_to_event = {}
+event_dict = {}
+event_clusters = set()
+
+list_cluster_center_point = []
+list_cluster_center_tmp = []
+
+data_set = []
+
+event_feature_to_event_id = {}
+
+with open('data.csv', "r") as f:
+	reader = csv.DictReader(f, delimiter='+')
+
+	for row in reader:
+		select_feature = []
+
+		if (row['eventid'] >'201412310106' and row['eventid'] < '201701010001' and row['claimed'] == '0' and row['related'] != ''):
+			if(row['eventid'] in event_dict.keys()):
+				event_dict[row['eventid']].append(row['related'])
+			else:
+				event_dict[row['eventid']] = row['related']
+
+			select_feature.append(float(row['extended']))
+			select_feature.append(float(row['crit1']))
+			select_feature.append(float(row['crit2']))
+			select_feature.append(float(row['crit3']))
+			select_feature.append(float(row['doubtterr']))
+			if (row['alternative'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['alternative']))
+			select_feature.append(float(row['country']))
+			select_feature.append(float(row['region']))
+			select_feature.append(float(row['attacktype1']))
+			select_feature.append(float(row['suicide']))
+			select_feature.append(float(row['weaptype1']))
+			if (row['weapsubtype1'] == ''):
+				select_feature.append(float('27'))
+			else:
+				select_feature.append(float(row['weapsubtype1']))
+			select_feature.append(float(row['targtype1']))
+
+			if (row['targsubtype1'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['targsubtype1']))
+
+			if (row['natlty1'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['natlty1']))
+				
+			if (row['nperps'] == ''):
+				select_feature.append(float('-99'))
+			else:
+				select_feature.append(float(row['nperps']))
+
+			if (row['claimmode'] == ''):
+				select_feature.append(float('10'))
+			else:
+				select_feature.append(float(row['claimmode']))
+
+			if (row['nkill'] == ''):
+				select_feature.append(float('0'))
+			else:
+				select_feature.append(float(row['nkill']))
+
+			select_feature.append(float(row['property']))
+
+			if (row['propextent'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['propextent']))
+
+			select_feature.append(float(row['ishostkid']))
+
+			if (row['nhostkid'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['nhostkid']))
+
+			if (row['ransom'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['ransom']))
+
+			if (row['ransomamt'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['ransomamt']))
+
+			if (row['hostkidoutcome'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['hostkidoutcome']))
+
+			if (row['nreleased'] == ''):
+				select_feature.append(float('-1'))
+			else:
+				select_feature.append(float(row['nreleased']))
+
+			select_feature.append(float(row['INT_LOG']))
+			select_feature.append(float(row['INT_IDEO']))
+			select_feature.append(float(row['INT_MISC']))
+			select_feature.append(float(row['INT_ANY']))
+
+			event_to_vector[row['eventid']] = select_feature
+			data_set.append(select_feature)
+
+			select_feature_tmp = [str(i) for i in select_feature]
+			select_feature_str = ",".join(select_feature_tmp)
+			if(select_feature_str in event_feature_to_event_id.keys()):
+				event_feature_to_event_id[select_feature_str] = event_feature_to_event_id[select_feature_str] + ',' + row['eventid']
+			else:
+				event_feature_to_event_id[select_feature_str] = row['eventid']
+
+
+	for(k, v) in event_dict.items():
+		event_clusters.add(v)
+
+for event in event_clusters:
+	mark = 0
+	for event_id in event.split(', '):
+		if(not event_id in event_to_vector.keys()):
+			mark = 1
+
+	if(mark == 0):
+		list_cluster_center_tmp[:] = []
+		for event_id in event.split(', '):
+			list_cluster_center_tmp.append(event_to_vector[event_id] )
+
+		list_cluster_center_sum = [0 for n in range(0, len(event_to_vector['201601200023']))]
+
+		for point in list_cluster_center_tmp:
+			for i in range(len(event_to_vector['201601200023'])):
+				list_cluster_center_sum[i] = list_cluster_center_sum[i] + point[i]
+
+		for i in range(len(event_to_vector['201601200023'])):
+			list_cluster_center_sum[i] = list_cluster_center_sum[i] / len(list_cluster_center_tmp)
+
+		list_cluster_center_point.append(list_cluster_center_sum)
+
+f.close()
+
+X = np.array(data_set)
+kmeans=KMeans(n_clusters=len(list_cluster_center_point),n_init=1,init=np.array(list_cluster_center_point)).fit(X).predict(X)
+
+cluster_to_feature = {}
+
+cluster_to_event_id = {}
+for i in range(len(X)):
+	if(kmeans[i] in cluster_to_feature.keys()):
+		cluster_to_feature[kmeans[i]].append(data_set[i])
+		
+	else:
+		new_list = []
+		new_list.append(data_set[i])
+		cluster_to_feature[kmeans[i]] = new_list
+
+	if(kmeans[i] in cluster_to_event_id.keys()):
+		data_set_tmp = [str(j) for j in data_set[i]]
+		cluster_to_event_id[kmeans[i]] = list(set(cluster_to_event_id[kmeans[i]]).union(set([str(x) for x in (event_feature_to_event_id[",".join(data_set_tmp)]).split(',')])))
+
+	else:
+		data_set_tmp = [str(j) for j in data_set[i]]
+		cluster_to_event_id[kmeans[i]] = [str(x) for x in (event_feature_to_event_id[",".join(data_set_tmp)]).split(',')]
+
+
+new_cluster_to_feature = {}
+for cluster_index in cluster_to_feature.iterkeys():
+	list_cluster_new_center_sum = [0 for n in range(0, len(event_to_vector['201601200023']))]
+	for point_new in cluster_to_feature[cluster_index]:
+		for i in range(len(event_to_vector['201601200023'])):
+			 list_cluster_new_center_sum[i] = list_cluster_new_center_sum[i] + point_new[i]
+
+	for i in range(len(event_to_vector['201601200023'])):
+		list_cluster_new_center_sum[i] = list_cluster_new_center_sum[i] / len(cluster_to_feature[cluster_index])
+
+	new_cluster_to_feature[cluster_index] = list_cluster_new_center_sum
+
+new_cluster_center_to_event_id = {}
+new_list_cluster_center_point = []
+
+for cluster_index in new_cluster_to_feature.iterkeys():
+	new_cluster_to_feature_tmp = [str(i) for i in new_cluster_to_feature[cluster_index]]
+	new_cluster_to_feature_str = ",".join(new_cluster_to_feature_tmp)
+	if(new_cluster_to_feature_str in new_cluster_center_to_event_id.keys()):
+		new_cluster_center_to_event_id[new_cluster_to_feature_str].append(cluster_to_event_id[cluster_index])
+	else:
+		new_cluster_center_to_event_id[new_cluster_to_feature_str] = (cluster_to_event_id[cluster_index])
+
+	new_list_cluster_center_point.append(new_cluster_to_feature[cluster_index])
+
+Y = np.array(new_list_cluster_center_point)
+kmeans_y=KMeans(n_clusters=10, init='k-means++', n_init=10, max_iter=300, tol=0.0001, 
+    precompute_distances='auto', 
+    verbose=0, 
+    random_state=None, 
+    copy_x=True, 
+    n_jobs=1, 
+    algorithm='auto').fit(Y).predict(Y)
+
+for i in range(len(new_list_cluster_center_point)):
+	print i ,
+	print new_list_cluster_center_point[i] ,
+	data_set_tmp_y = [str(j) for j in new_list_cluster_center_point[i]]
+	print new_cluster_center_to_event_id[",".join(data_set_tmp_y)] ,
+	print kmeans_y[i] ,
+	print    
+
